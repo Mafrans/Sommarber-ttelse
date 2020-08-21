@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+    <title>Document</title>
+
+    <style>
+        * {
+            margin: 0;
+        }
+
+        body {
+            font-family: 'Oswald', sans-serif;
+            overflow: hidden;
+            overflow-y: scroll;
+            height: 800vh;
+            width: 100vw;
+        }
+
+        .background {
+            padding: 10px;
+            position: fixed;
+            font-weight: 700;
+            font-size: 64px;
+            height: 100vh;
+            width: 200vw;
+            z-index: -1;
+            background: #F0F0F0;
+            color: #F0F0F0;
+            text-shadow: -4px 4px 0px white
+        }
+
+        .container {
+            left: 50%;
+            transform: translateX(-50%);
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            max-width: 960px;
+            background: white;
+            text-align: center;
+        }
+        
+        .content-container {
+            position: fixed;
+            height: 600px;
+            width: 100%;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            clip-path: inset(0 0 0 0);
+            flex-direction: column;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content-container .content {
+            position: absolute;
+            text-transform: uppercase;
+            font-size: 48px;
+            transition: margin-top 0.2s ease-out;
+            opacity: 0;
+            margin-top: 600px;
+        }
+
+        .content-container .content.in {
+            margin-top: 0px;
+        }
+
+        .content-container .shown {
+            opacity: 1;
+        }
+
+        .content-container .content.out {
+            margin-top: -600px;
+        }
+
+        h1 {
+            color: #ff7dde;
+            text-shadow: -6px 6px 0px pink;
+        }
+
+        img {
+            width: 80%;
+            height: 400px;
+            object-fit: cover;
+            -webkit-box-shadow: -6px 6px 0px 0px pink;
+            -moz-box-shadow:    -6px 6px 0px 0px pink;
+            box-shadow:         -6px 6px 0px 0px pink;
+            border: 8px solid #ff7dde;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="container">
+        <div class="content-container">
+            <div class="content shown in" data-start="0" data-end="300">
+                <h1>Min Sommarhistoria</h1>
+            </div>
+            <div class="content" data-start="600" data-end="900">
+                <h1>Det tråkigaste</h1>
+                <p>Jag gjort i sommar var att ha skolavslutning online.</p>
+            </div>
+            <div class="content" data-start="1200" data-end="1500">
+                <h1>Men jag har</h1>
+                <p>Också gjort en rolig grej, det var att koda.</p>
+            </div>
+            <div class="content" data-start="1800" data-end="2100">
+                <p>Jag har badat</p>
+                <h1>0</h1>
+                <p>Gånger.</p>
+            </div>
+            <div class="content" data-start="2400" data-end="2700">
+                <h1>Jag åt pizza</h1>
+                <img src="Pizza.jpg" alt="" srcset="">
+                <p>Det var gott</p>
+            </div>
+            <div class="content" data-start="3000" data-end="3300">
+                <h1>Jag tittade på</h1>
+                <img src="Jojo.jpg" alt="" srcset="">
+                <p>Jojo's Bizarre Adventure</p>
+            </div>
+            <div class="content" data-start="3600" data-end="3900">
+                <h1>Jag åkte till stugan</h1>
+                <img src="Strand.jpg" alt="" srcset="">
+            </div>
+            <div class="content" data-start="5000" data-end="5500">
+                <p>Och jag tror skolan kommer bli</p>
+                <h1>Pog som fan</h1>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const $ = (a) => document.querySelector(a);
+        const _$ = (a) => document.querySelectorAll(a);
+
+        $('.background').textContent = "SKITSKOLA ".repeat(255);
+
+        let lastScroll = 0;
+        window.addEventListener('scroll', (event) => {
+            const scroll = window.scrollY;
+            console.log(scroll);
+            for(const e of _$('.content')) {
+                const start = e.getAttribute('data-start');
+                const end = e.getAttribute('data-end');
+
+                if(scroll >= start && scroll < end) {
+                    if(!e.classList.contains('shown')) {
+                        e.classList.add('shown')
+                        e.classList.remove('out');
+                        if(lastScroll < start || lastScroll > end) {
+                            e.classList.add('in');
+                        }
+                    }
+                }
+                else {
+                    if(e.classList.contains('shown')) {
+                        if(lastScroll < end) {
+                            e.classList.add('out');
+                        }
+                        setTimeout(() => {
+                            e.classList.remove('shown');
+                            e.classList.remove('out');
+                        }, 200);
+                        e.classList.remove('in');
+                    }
+                }
+            }
+            lastScroll = scroll;
+        })
+    </script>
+</body>
+</html>
